@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: productimage
+spec:
+  selector:
+    app: productimage
+  ports:
+    - port: 20
+      targetPort: 2020
+  type: LoadBalancer

@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: productimage
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: productimage
+  template:
+    metadata:
+      labels:
+        app: productimage
+    spec:
+      containers:
+        - name: app
+          image: dinezmca/productimage:1
+          ports:
+            - containerPort: 2020
+            env:
+            - name: MONGO_URL
+              value: mongodb://mongo:27017/dev
+          imagePullPolicy: Always

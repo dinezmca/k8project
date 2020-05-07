@@ -1,0 +1,83 @@
+version: "3"
+networks:
+    dockerdb:
+        external: 
+            name: dockerdb
+services:
+  discovery:
+    image: dinezmca/ureka:1.0
+    container_name: discovery
+    ports:
+      - 127.0.0.1:8761:8761/tcp
+    networks:
+      - dockerdb
+  dockerdb:
+    image: store/oracle/database-enterprise:12.2.0.1-slim
+    container_name: dockerdb
+    hostname: dockerdb
+    volumes:
+      - /data/oracle
+    ports:
+      - 127.0.0.1:1521:1521/tcp
+    networks:
+      - dockerdb
+    volumes:
+      - ${PWD}/config/:/var
+    environment:
+      - TNS_ADMIN=/var/tnsadmin.ora
+#    healthcheck:
+#      test: echo "select * from v\$database;" | sqlplus -S sys/oracle as sysdba || exit 1
+#      timeout: 3s
+#      interval: 30s
+##      start_period: 900s
+#      retries: 30
+  product:
+    image: dinezmca/product:1.0
+    environment:
+        SPRING_JPA_HIBERNATE_DDL-AUTO: update
+        SPRING_PROFILES_ACTIVE: docker-oracle
+    #entrypoint: ["./wait-for-it.sh","discovery:8761","--timeout=0","--strict", "--", "java", "-jar","app.jar" ]
+    depends_on:
+      - db
+    container_name: product
+    ports:
+      - 127.0.0.1:2020:2020/tcp
+    depends_on:
+      - discovery
+      - dockerdb
+    networks:
+      - dockerdb
+  customer:
+    image: dinezmca/customer:1.0
+    container_name: customer
+    ports:
+      - 127.0.0.1:1010:1010/tcp
+    depends_on:
+      - discovery
+      - dockerdb
+    networks:
+      - dockerdb
+  cart:
+    image: dinezmca/cart:1.0
+    container_name: cart
+    ports:
+      - 127.0.0.1:3030:3030/tcp
+    depends_on:
+      - discovery
+      - dockerdb
+      - product
+      - customer
+    networks:
+      - dockerdb
+  payment:
+    image: dinezmca/payment:1.0
+    container_name: payment
+    ports:
+      - 127.0.0.1:4040:4040/tcp
+    depends_on:
+      - discovery
+      - dockerdb
+      - customer
+      - cart
+    networks:
+      - dockerdb
