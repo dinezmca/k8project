@@ -1,0 +1,36 @@
+version: "3"
+networks:
+    dockerdb:
+        external: 
+            name: dockerdb
+services:
+  discovery:
+    image: dinezmca/ureka:1.0
+    container_name: discovery
+    ports:
+      - 127.0.0.1:8761:8761/tcp
+    networks:
+      - dockerdb
+  dockerdb:
+    image: store/oracle/database-enterprise:12.2.0.1-slim
+    container_name: dockerdb
+    hostname: dockerdb
+    volumes:
+      - /data/oracle
+    ports:
+      - 127.0.0.1:1521:1521/tcp
+    networks:
+      - dockerdb
+    volumes:
+      - ${PWD}/config/:/var
+    environment:
+      - TNS_ADMIN=/var/tnsadmin.ora
+#    healthcheck:
+#      test: echo "select * from v\$database;" | sqlplus -S sys/oracle as sysdba || exit 1
+#      timeout: 3s
+#      interval: 30s
+##      start_period: 900s
+#      retries: 30
+ 
+    networks:
+      - dockerdb

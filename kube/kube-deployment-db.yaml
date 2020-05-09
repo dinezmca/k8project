@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: dockerdb
+spec:
+  ports:
+  - port: 1521
+  selector:
+    app: dockerdb
+  clusterIP: None
+---
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: dockerdb
+spec:
+  selector:
+    matchLabels:
+      app: dockerdb
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: dockerdb
+    spec:
+      containers:
+      - image: store/oracle/database-enterprise:12.2.0.1-slim
+        name: dockerdb
+        env:
+          # Use secret in real usage
+        - name: ORACLE_ROOT_PASSWORD
+          value: Oradoc_db1
+        ports:
+        - containerPort: 1521
+          name: dockerdb
+        volumeMounts:
+        - name: oracle-persistent-storage
+          mountPath: /data/oracle
+      volumes:
+      - name: oracle-persistent-storage
+        persistentVolumeClaim:
+          claimName: oracle-pv-claim

@@ -9,7 +9,7 @@ services:
     image: dinezmca/product:1.0
     container_name: product
     ports:
-      - "2020:2020"
+      - 127.0.0.1:2020:2020/tcp
     networks:
       - dockerdb
   customer:

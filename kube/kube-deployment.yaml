@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: db-deployment
+  labels:
+    app: dockerdb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dockerdb
+  template:
+    metadata:
+      labels:
+        app: dockerdb
+    spec:
+      containers:
+      - name: dockerdb
+        image: store/oracle/database-enterprise:12.2.0.1-slim
+        ports:
+        - containerPort: 1521
