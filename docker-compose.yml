@@ -6,21 +6,21 @@ networks:
 services:
 
   product:
-    image: dinezmca/product:1.0
+    image: dinezmca/product:1.1
     container_name: product
     ports:
       - "2020:2020"
     networks:
       - dockerdb
   customer:
-    image: dinezmca/customer:1.0
+    image: dinezmca/customer:1.1
     container_name: customer
     ports:
       - "1010:1010"
     networks:
       - dockerdb
   cart:
-    image: dinezmca/cart:1.0
+    image: dinezmca/cart:1.1
     container_name: cart
     ports:
       - "3030:3030"
@@ -30,7 +30,7 @@ services:
     networks:
       - dockerdb
   payment:
-    image: dinezmca/payment:1.0
+    image: dinezmca/payment:1.1
     container_name: payment
     ports:
       - "4040:4040"
