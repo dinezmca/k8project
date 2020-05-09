@@ -4,7 +4,13 @@ networks:
         external: 
             name: dockerdb
 services:
-
+  discovery:
+    image: dinezmca/ureka:1.0
+    container_name: ureka
+    ports:
+      - "8761:8761"
+    networks:
+      - dockerdb
   product:
     image: dinezmca/product:1.1
     container_name: product
