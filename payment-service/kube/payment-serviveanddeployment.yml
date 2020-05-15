@@ -48,5 +48,7 @@ spec:
           value: "jdbc:mysql://mysql-shop.shop-development/SHOP?allowPublicKeyRetrieval=true&useSSL=false"
         - name: eureka.client.service-url.defaultZone
           value: "http://ureka-v1-0-service.shop-development:8761/eureka"
+        - name: eureka.instance.preferIpAddress
+          value: "true"
         ports:
         - containerPort: 4040

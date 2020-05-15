@@ -27,5 +27,7 @@ spec:
         env:
         - name: spring.profiles.active
           value: "development"
+        - name: eureka.instance.preferIpAddress
+          value: "true"
         ports:
         - containerPort: 8761
