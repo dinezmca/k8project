@@ -37,7 +37,7 @@ public class CartController {
 	}
 	
 	@RequestMapping(value="selected")
-	@HystrixCommand(fallbackMethod = "myFirstFallBack")
+	//@HystrixCommand(fallbackMethod = "myFirstFallBack")
 	public CartItem getWishedItems(@RequestParam String customerId, Long productId){
 
 		String url = "http://productservice/getProduct?productId=" +productId; 

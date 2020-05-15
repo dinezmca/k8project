@@ -1,0 +1,20 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: ureka-v1-0-service
+  namespace: shop-development
+  labels:
+    app: ureka
+    version: "1.0"
+    environment: development
+spec:
+  selector:
+    app: ureka
+    version: "1.0"
+    environment: development
+  type: NodePort
+  ports:
+  - protocol: TCP
+    nodePort: 30111
+    port: 8761
+    targetPort: 8761

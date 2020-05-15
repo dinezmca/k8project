@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ureka-v1.0
+  namespace: shop-development
+  labels:
+    app: ureka
+    version: "1.0"
+    environment: development
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ureka
+      version: "1.0"
+      environment: development
+  template:
+    metadata:
+      labels:
+        app: ureka
+        version: "1.0"
+        environment: development
+    spec:
+      containers:
+      - name: ureka-v1-0-container
+        image: dinezmca/ureka:1.0
+        env:
+        - name: spring.profiles.active
+          value: "development"
+        ports:
+        - containerPort: 8761

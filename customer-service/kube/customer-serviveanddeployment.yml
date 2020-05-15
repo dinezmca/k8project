@@ -1,0 +1,52 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: customer-service
+  namespace: shop-development
+  labels:
+    app: customer
+    version: "1.0"
+    environment: development
+spec:
+  selector:
+    app: customer
+    version: "1.0"
+    environment: development
+  type: NodePort
+  ports:
+  - protocol: TCP
+    nodePort: 30113
+    port: 1010
+    targetPort: 1010
+---
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: customer-deployment
+  namespace: shop-development
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: customer
+      version: "1.0"
+      environment: development
+  template:
+    metadata:
+      labels:
+        app: customer
+        version: "1.0"
+        environment: development
+    spec:
+      containers:
+      - name: customer
+        image: dinezmca/customer:1.0
+        env:
+        - name: spring.profiles.active
+          value: "development"
+        - name: spring.datasource.url
+          value: "jdbc:mysql://mysql-shop.shop-development/SHOP?allowPublicKeyRetrieval=true&useSSL=false"
+        - name: eureka.client.service-url.defaultZone
+          value: "http://ureka-v1-0-service.shop-development:8761/eureka"
+        ports:
+        - containerPort: 1010
