@@ -8,7 +8,7 @@ metadata:
     version: "1.0"
     environment: development
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: ureka

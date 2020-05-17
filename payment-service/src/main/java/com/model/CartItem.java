@@ -1,5 +1,6 @@
 package com.model;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -17,12 +18,19 @@ import javax.persistence.Table;
 import org.hibernate.annotations.DynamicUpdate;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 @Entity
 @Table(name="Cart_info")
 @DynamicUpdate
+@JsonDeserialize(using = CartItemDeserializer.class)
 public class CartItem {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator ="CART_SEQ")
 	@SequenceGenerator(sequenceName = "CART_SEQ", allocationSize = 100, name = "CART_SEQ")
@@ -47,7 +55,7 @@ public class CartItem {
 	@Column(name="GRAND_TOTAL")
 	private BigDecimal grandTotal;
 	
-	@Column(name="SHIPPING_STATUS")
+	@Column(name="SHIPPING_STATUS", columnDefinition = "boolean default false")
 	private Boolean shippingStatus;
 	
 	@Column(name="Delivery_Date")

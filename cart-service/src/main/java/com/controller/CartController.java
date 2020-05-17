@@ -5,8 +5,13 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
@@ -60,9 +65,10 @@ public class CartController {
 		cardItem.setProdcutId(productId);
 		cardItem.setQuantity(1L);
 		cardItem.setShippingCost(new BigDecimal(30));
-		cardItem.setShippingStatus(Boolean.FALSE);
+		cardItem.setShippingStatus(true);
 		cardItem.setSubTotal(new BigDecimal(product.getPrice()));
 		cardItem.setGrandTotal(cardItem.getShippingCost().add(cardItem.getSubTotal()));
+		cardItem.setPrice(new BigDecimal(product.getPrice()));
 		cartRepository.save(cardItem);
 		cartRepository.flush();
 		return cardItem;
@@ -73,15 +79,16 @@ public class CartController {
 		return cartRepository.findBycartId(cartId);
 	}
 	
-	@RequestMapping(value="update")
-	public Integer updateCart(@RequestParam Long cartid, Long custid){
-		return cartRepository.updateCartStatus(cartid, custid); 
-	}
-
 	@RequestMapping(value="getItems")
 	public List<CartItem> getItems(@RequestParam Long custid){
 		return cartRepository.getCartItems(custid);
 	}
+	
+	@PutMapping(path="/update")
+	public @ResponseBody String updateCart(@RequestBody CartItem item) {
+		cartRepository.save(item);
+	    return "Updated"; 
+	    }
 	
 	@RequestMapping(value="getAllItems")
 	public List<CartItem> getAllItems(@RequestParam Long custid){

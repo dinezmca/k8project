@@ -24,6 +24,6 @@ public interface CartItemRepository extends JpaRepository<CartItem, Long> {
 
 	@Transactional
 	@Modifying
-	@Query("update CartItem c set c.shippingStatus=1 where c.customer.customerid = :custid and c.cartId=:cartid")
-	Integer updateCartStatus(@Param("cartid") Long cartid, @Param("custid") Long custid);
+	@Query("update CartItem c set c.shippingStatus='true' where c.customer.customerid = :custid and c.cartId=:cartid")
+	void updateCartStatus(@Param("cartid") Long cartid, @Param("custid") Long custid);
 }

@@ -14,10 +14,16 @@ spec:
     environment: development
   type: NodePort
   ports:
-  - protocol: TCP
+  - name: web
+    protocol: TCP
     nodePort: 30115
     port: 4040
     targetPort: 4040
+  - name: debug
+    protocol: TCP
+    nodePort: 30216
+    port: 9999
+    targetPort: 9999
 ---
 apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
 kind: Deployment
@@ -25,7 +31,7 @@ metadata:
   name: payment-deployment
   namespace: shop-development
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: payment
@@ -51,4 +57,7 @@ spec:
         - name: eureka.instance.preferIpAddress
           value: "true"
         ports:
-        - containerPort: 4040
+         - name: web
+           containerPort: 4040
+         - name: debug
+           containerPort: 9999

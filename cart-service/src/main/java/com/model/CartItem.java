@@ -14,9 +14,11 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 @Entity
 @Table(name="Cart_info")
+@JsonDeserialize(using = CartItemDeserializer.class)
 public class CartItem {
 	
 	@Id
@@ -43,7 +45,7 @@ public class CartItem {
 	@Column(name="GRAND_TOTAL")
 	private BigDecimal grandTotal;
 	
-	@Column(name="SHIPPING_STATUS")
+	@Column(name="SHIPPING_STATUS", columnDefinition = "boolean default false")
 	private Boolean shippingStatus;
 	
 	@Column(name="Delivery_Date")
